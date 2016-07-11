@@ -1,17 +1,37 @@
 package crowd.ninja.model;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import crow.ninja.db.ConnectionFactory;
+
 public class UserDao {
-	
-	private static List<User> userList = null;
+
+	private static Connection conn;
+
+	public UserDao() {
+		if (conn == null)
+			try {
+				conn = ConnectionFactory.getConnection();
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+	}
 
 	public List<User> getAllUsers() {
-		if (userList == null) {
-			User user = new User(1, "Rafael");
-			userList = new ArrayList<User>();
-			userList.add(user);
+		List<User> userList = new ArrayList<User>();
+
+		try {
+			ResultSet rs = conn.createStatement().executeQuery("SELECT id, name FROM user;");
+			while (rs.next()) {
+				userList.add(new User(rs.getInt("id"), rs.getString("name")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return userList;
 	}
@@ -37,8 +57,14 @@ public class UserDao {
 			}
 		}
 		if (!userExists) {
-			userList.add(pUser);
-			return 1;
+			try {
+				conn.createStatement()
+						.execute("INSERT INTO user VALUES(" + pUser.getId() + ", '" + pUser.getName() + "')");
+				return 1;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				;
+			}
 		}
 		return 0;
 	}
@@ -48,9 +74,12 @@ public class UserDao {
 
 		for (User user : userList) {
 			if (user.getId() == pUser.getId()) {
-				int index = userList.indexOf(user);
-				userList.set(index, pUser);
-				return 1;
+				try {
+					conn.createStatement().execute("UPDATE USER SET id= " + pUser.getId() + ", name= '" + pUser.getName() + "' WHERE id = " + user.getId());
+					return 1;
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return 0;
@@ -61,9 +90,12 @@ public class UserDao {
 
 		for (User user : userList) {
 			if (user.getId() == id) {
-				int index = userList.indexOf(user);
-				userList.remove(index);
-				return 1;
+				try {
+					conn.createStatement().execute("DELETE USER WHERE id = "+ user.getId());
+					return 1;
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return 0;
