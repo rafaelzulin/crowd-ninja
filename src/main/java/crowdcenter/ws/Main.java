@@ -1,4 +1,4 @@
-package crowd.ninja.ws;
+package crowdcenter.ws;
 
 import java.io.IOException;
 

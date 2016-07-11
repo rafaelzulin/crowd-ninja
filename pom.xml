@@ -1,13 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>crowd-ninja</groupId>
-	<artifactId>crowd-ninja-core</artifactId>
+	<groupId>crowd-center</groupId>
+	<artifactId>crowd-center-spikes</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>crowd-ninja-core</name>
+	<name>crowd-center-spikes</name>
 
 	<properties>
+		<jettyVersion>9.2.11.v20150529</jettyVersion>
 		<jettyPort>8080</jettyPort>
 		<jerseyVersion>2.23.1</jerseyVersion>
 	</properties>

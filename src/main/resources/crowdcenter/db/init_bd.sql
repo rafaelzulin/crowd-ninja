@@ -1,4 +1,4 @@
-DROP ALL OBJECTS;
+--DROP ALL OBJECTS;
 
 CREATE TABLE user (
 	id number not null primary key,

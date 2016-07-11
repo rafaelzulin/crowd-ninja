@@ -1,4 +1,4 @@
-package crowd.ninja.ws;
+package crowdcenter.ws;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,8 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import crowd.ninja.model.User;
-import crowd.ninja.model.UserDao;
+import crowdcenter.model.User;
+import crowdcenter.model.UserDao;
 
 @Path("/UserServices")
 public class UserService {

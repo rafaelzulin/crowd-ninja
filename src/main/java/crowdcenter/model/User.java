@@ -1,4 +1,4 @@
-package crowd.ninja.model;
+package crowdcenter.model;
 
 import java.io.Serializable;
 
@@ -33,6 +33,12 @@ public class User implements Serializable {
    public void setName(String name) {
       this.name = name;
    }
+   
+   @Override
+   public String toString() {
+	   return String.format("<User @id=%d @name=%s>", getId(), getName());
+   }
+   
    @Override
    public boolean equals(Object object){
 		if (object == null) {
