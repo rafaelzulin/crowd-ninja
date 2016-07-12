@@ -17,21 +17,25 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import crowdcenter.model.User;
 import crowdcenter.model.UserDao;
 
 @Path("/UserServices")
 public class UserService {
 
-	UserDao userDao = new UserDao();
+	private static final Logger logger = LogManager.getLogger(UserService.class); 
 	private static final String SUCCESS_RESULT = "<result>success</result>";
 	private static final String FAILURE_RESULT = "<result>failure</result>";
+	UserDao userDao = new UserDao();
 
 	@GET
 	@Path("/users")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<User> getUsers() {
-		System.out.println("getUsers");
+		logger.info("getUsers");
 		return userDao.getAllUsers();
 	}
 
@@ -39,7 +43,7 @@ public class UserService {
 	@Path("/users/{userid}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User getUser(@PathParam("userid") int userid) {
-		System.out.println("getUser");
+		logger.info("getUser");
 		return userDao.getUser(userid);
 	}
 
@@ -50,7 +54,7 @@ public class UserService {
 	public String createUser(@FormParam("id") int id, @FormParam("name") String name,
 			@FormParam("profession") String profession, @Context HttpServletResponse servletResponse)
 			throws IOException {
-		System.out.println("createUser");
+		logger.info("createUser");
 		User user = new User(id, name);
 		int result = userDao.addUser(user);
 		if (result == 1) {
@@ -66,7 +70,7 @@ public class UserService {
 	public String updateUser(@FormParam("id") int id, @FormParam("name") String name,
 			@FormParam("profession") String profession, @Context HttpServletResponse servletResponse)
 			throws IOException {
-		System.out.println("updateUser");
+		logger.info("updateUser");
 		User user = new User(id, name);
 		int result = userDao.updateUser(user);
 		if (result == 1) {
@@ -79,7 +83,7 @@ public class UserService {
 	@Path("/users/{userid}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteUser(@PathParam("userid") int userid) {
-		System.out.println("deleteUser");
+		logger.info("deleteUser");
 		int result = userDao.deleteUser(userid);
 		if (result == 1) {
 			return SUCCESS_RESULT;
@@ -91,7 +95,7 @@ public class UserService {
 	@Path("/users")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getSupportedOperations() {
-		System.out.println("getSupportedOperations");
+		logger.info("getSupportedOperations");
 		return "Services\r\n" + 
 			"*List users\r\n" + 
 			"-> curl -X GET http://localhost:8080/rest/UserServices/users\r\n" + 
