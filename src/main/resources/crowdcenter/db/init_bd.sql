@@ -1,6 +1,15 @@
 --DROP ALL OBJECTS;
 
 CREATE TABLE user (
-	id number not null primary key,
-	name VARCHAR2 not null
+	id NUMBER NOT NULL PRIMARY KEY,
+	name VARCHAR2 NOT NULL,
+	email VARCHAR2 NOT NULL,
+	login VARCHAR2 NOT NULL, 
+	password VARCHAR2 NOT NULL
+);
+
+CREATE TABLE skill (
+	id number NOT NULL PRIMARY KEY,
+	name VARCHAR2 NOT NULL,
+	description VARCHAR2 NOT NULL
 );

@@ -1,46 +1,81 @@
 package crowdcenter.model;
 
-import java.io.Serializable;
+import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import crowdcenter.db.Dao;
+import crowdcenter.db.UserDao;
 
-@XmlRootElement(name = "user")
-public class User implements Serializable {
+public class User extends Entity {
 
-   private static final long serialVersionUID = 1L;
-   private int id;
-   private String name;
+	private static Dao<User> dao;
+	private String name;
+	private String email;
+	private String login;
+	private String password;
 
-   public User(){}
-   
-   public User(int id, String name){
-      this.id = id;
-      this.name = name;
-   }
+	private User() {
+		super();
+		dao = new UserDao();
+	}
+	
+	public User(String name, String email, String login, String password) {
+		this();	
+		this.name = name;
+		this.email = email;
+		this.login = login;
+		this.password = password;
+	}
 
-   public int getId() {
-      return id;
-   }
-   @XmlElement
-   public void setId(int id) {
-      this.id = id;
-   }
-   public String getName() {
-      return name;
-   }
-   @XmlElement
-   public void setName(String name) {
-      this.name = name;
-   }
-   
-   @Override
-   public String toString() {
-	   return String.format("<User @id=%d @name=%s>", getId(), getName());
-   }
-   
-   @Override
-   public boolean equals(Object object){
+	public User(Long id, String name, String email, String login, String password, Boolean isNewObject) {
+		//Must be used only for recover from bd
+		super(false);
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.login = login;
+		this.password = password;
+		this.newObject = isNewObject;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", login=" + login + "newObject= "+ newObject +"]";
+	}
+
+	@Override
+	public boolean equals(Object object) {
 		if (object == null) {
 			return false;
 		} else if (!(object instanceof User)) {
@@ -51,6 +86,33 @@ public class User implements Serializable {
 				return true;
 			}
 		}
-	      return false;
-	   }	
+		return false;
+	}
+	
+	public Boolean save() {
+		int response = 0;
+		if (this.isNewObject()) {
+			response = dao.add(this);
+			this.setNewObject(false);
+		} else {
+			response = dao.update(this);
+		}
+		return response == 1;
+	}
+	
+	public Boolean delete() {
+		if (! isNewObject()) {
+			dao.delete(this.getId());
+			return true;
+		}
+		return false;
+	}
+	
+	public static List<User> getAll() {
+		return dao.getAll();
+	}
+	
+	public static User get(Long id) {
+		return dao.get(id);
+	}
 }
